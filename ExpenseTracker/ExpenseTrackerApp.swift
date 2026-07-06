@@ -10,23 +10,26 @@ import SwiftData
 
 @main
 struct ExpenseTrackerApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainTabView()
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(for: Expense.self)
+    }
+}
+
+struct MainTabView: View {
+    var body: some View {
+        TabView {
+            ContentView()
+                .tabItem {
+                    Label("Expenses", systemImage: "creditcard")
+                }
+
+            SummaryView()
+                .tabItem {
+                    Label("Summary", systemImage: "chart.bar")
+                }
+        }
     }
 }
